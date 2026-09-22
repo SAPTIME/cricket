@@ -1,0 +1,24 @@
+services:
+  db:
+    ports:
+      - "55433:5432"
+
+  redis:
+    ports:
+      - "56379:6379"
+
+  app:
+    build:
+      target: runtime
+    volumes:
+      - ./backend/app:/app/app:ro
+    ports:
+      - "8001:8000"
+    command: ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload", "--reload-dir", "/app/app"]
+    environment:
+      ENV: local
+      DEBUG: "true"
+
+  nginx:
+    ports:
+      - "8080:80"
