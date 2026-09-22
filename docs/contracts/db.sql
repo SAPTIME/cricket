@@ -328,6 +328,7 @@ CREATE TABLE card_stats (
     last_swipe_at       timestamptz,
     last_swipe_dir      text CHECK (last_swipe_dir IN ('left', 'right')),
     mastered_at         timestamptz,
+    edits_count         integer NOT NULL DEFAULT 0,
     updated_at          timestamptz NOT NULL DEFAULT now(),
     PRIMARY KEY (card_id, user_id)
 );
@@ -336,6 +337,7 @@ COMMENT ON TABLE  card_stats IS 'Агрегированная статистик
 COMMENT ON COLUMN card_stats.time_front_ms IS 'Суммарное время на лицевой стороне, мс';
 COMMENT ON COLUMN card_stats.time_back_ms IS 'Суммарное время на обратной стороне, мс';
 COMMENT ON COLUMN card_stats.last_swipe_dir IS 'Последнее направление свайпа (для revert)';
+COMMENT ON COLUMN card_stats.edits_count IS 'Сколько раз карточку редактировали через PATCH /cards/:id';
 
 CREATE INDEX ix_card_stats_user ON card_stats (user_id);
 CREATE INDEX ix_card_stats_user_updated ON card_stats (user_id, updated_at DESC);
